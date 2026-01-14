@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-       // Utilisateur "admin"
+        // Utilisateur "admin"
         $admin = User::factory()->create([
             'name'     => 'Admin',
             'email'    => 'admin@example.com',
@@ -38,6 +38,10 @@ class DatabaseSeeder extends Seeder
         // Produits de l'utilisateur simple
         Product::factory()->count(3)->create([
             'user_id' => $user->id,
+        ]);
+
+        $this->call([
+            RolePermissionSeeder::class,
         ]);
     }
 }

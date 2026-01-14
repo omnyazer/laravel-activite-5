@@ -8,6 +8,18 @@ use App\Models\User;
 class ProductPolicy
 {
     /**
+     * Automatically grant all permissions to admin users.
+     */
+    public function before(User $user, string $ability): bool|null
+    {
+        if ($user->hasRole('admin')) {
+            return true;
+        }
+
+        return null; 
+    }
+
+    /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
@@ -20,7 +32,7 @@ class ProductPolicy
      */
     public function view(User $user, Product $product): bool
     {
-        return $user->id === $product->user_id || $product->is_public;
+        return $user->id === $product->user_id || (bool) $product->is_public;
     }
 
     /**
@@ -45,21 +57,5 @@ class ProductPolicy
     public function delete(User $user, Product $product): bool
     {
         return $user->id === $product->user_id;
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Product $product): bool
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Product $product): bool
-    {
-        return false;
     }
 }
