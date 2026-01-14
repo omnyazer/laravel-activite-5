@@ -18,10 +18,12 @@
                     <div class="mt-4">
 
                         {{-- Modifier --}}
-                        <a href="{{ route('products.edit', $product) }}"
-                           class="text-blue-600 underline">
-                            Modifier le produit
-                        </a>
+                        @can('update', $product)
+                            <a href="{{ route('products.edit', $product) }}"
+                               class="text-blue-600 underline">
+                                Modifier le produit
+                            </a>
+                        @endcan
 
                         <a href="{{ route('products.index') }}" class="ms-4 text-gray-600 underline">
                             ← Retour à la liste
