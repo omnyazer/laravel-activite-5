@@ -9,6 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
+
                     <a href="{{ route('products.create') }}" class="text-blue-600 underline">
                         Créer un produit
                     </a>
@@ -20,27 +21,40 @@
                                 — {{ $product->price }} €
                                 — {{ $product->is_public ? 'Public' : 'Privé' }}
                                 <br />
-                                <a href="{{ route('products.show', $product) }}" class="ml-2 text-blue-600 underline">
-                                    Voir
-                                </a>
-                                <br />
-                                {{-- Modifier --}}
-                                <a href="{{ route('products.edit', $product) }}" class="ml-2 text-green-600 underline">
-                                    Modifier
-                                </a>
 
-                                {{-- Supprimer --}}
-                                <form action="{{ route('products.destroy', $product) }}" method="POST" class="inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="ml-2 text-red-600 underline"
-                                        onclick="return confirm('Supprimer ce produit ?')">
-                                        Supprimer
-                                    </button>
-                                </form>
+                                {{-- Voir --}}
+                                @can('view-product', $product)
+                                    <a href="{{ route('products.show', $product) }}"
+                                       class="ml-2 text-blue-600 underline">
+                                        Voir
+                                    </a>
+                                @endcan
+
+                                <br />
+
+                                {{-- Modifier / Supprimer --}}
+                                @can('manage-product', $product)
+                                    <a href="{{ route('products.edit', $product) }}"
+                                       class="ml-2 text-green-600 underline">
+                                        Modifier
+                                    </a>
+
+                                    <form action="{{ route('products.destroy', $product) }}"
+                                          method="POST"
+                                          class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                                class="ml-2 text-red-600 underline"
+                                                onclick="return confirm('Supprimer ce produit ?')">
+                                            Supprimer
+                                        </button>
+                                    </form>
+                                @endcan
                             </li>
                         @endforeach
                     </ul>
+
                 </div>
             </div>
         </div>
