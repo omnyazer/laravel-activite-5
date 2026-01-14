@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 
 class ProductController extends Controller
 {
@@ -53,8 +52,6 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        Gate::authorize('view-product', $product);
-
         return view('products.show', compact('product'));
     }
 
@@ -63,8 +60,6 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        Gate::authorize('manage-product', $product);
-
         return view('products.edit', compact('product'));
     }
 
@@ -73,8 +68,6 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        Gate::authorize('manage-product', $product);
-
         $validated = $request->validate([
             'name'  => ['required', 'string', 'max:255'],
             'price' => ['required', 'numeric', 'min:0'],
@@ -96,8 +89,6 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        Gate::authorize('manage-product', $product);
-
         $product->delete();
 
         return redirect()
